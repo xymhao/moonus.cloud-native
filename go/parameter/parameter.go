@@ -18,8 +18,3 @@ func main() {
 	flag.Parse()
 	fmt.Println(*name)
 }
-
-// 初始化函数
-func init() {
-
-}
