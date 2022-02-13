@@ -1,2 +1,4 @@
 github.com/go-playground/assert/v2 v2.0.1 h1:MsBgLAaY856+nPRTKrp3/OZK38U/wa0CcBYNjji3q3A=
 github.com/go-playground/assert/v2 v2.0.1/go.mod h1:VDjEfimB/XKnb+ZQfWdccd7VUvScMdVu0Titje2rxJ4=
+github.com/petermattis/goid v0.0.0-20220111183729-e033e1e0bdb5 h1:AdVIf7YN+kn8QAapO6IQHtHKSBeSiNgkSS8Yai/xMmo=
+github.com/petermattis/goid v0.0.0-20220111183729-e033e1e0bdb5/go.mod h1:pxMtw7cyUw6B2bRH0ZBANSPg+AoSud1I1iyJHI69jH4=

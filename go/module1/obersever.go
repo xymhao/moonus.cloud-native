@@ -36,7 +36,7 @@ type Consumer struct {
 	name  string
 }
 
-func (consumer *Consumer) Handle() {
+func (consumer *Consumer) handle() {
 	go func(ch <-chan int) {
 		ticker := time.NewTicker(time.Second)
 		for _ = range ticker.C {
@@ -48,7 +48,7 @@ func (consumer *Consumer) Handle() {
 }
 
 func (consumer *Consumer) Start() {
-	consumer.Handle()
+	consumer.handle()
 }
 
 func main() {
