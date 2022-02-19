@@ -3,24 +3,20 @@ package main
 import (
 	"fmt"
 	"github.com/go-playground/assert/v2"
-	"sync/atomic"
 	"testing"
 )
 
-func TestHandleMessageCount(t *testing.T) {
+func TestHandleMessageConsumerCompleted(t *testing.T) {
 	messageChan := make(chan string, 10)
-	cancelChan := make(chan bool)
-	record := int32(0)
-	h := Handle{index: 0, message: messageChan, test: func() {
-		atomic.AddInt32(&record, 1)
-	}, cancel: cancelChan}
+	h := Handle{index: 0, message: messageChan}
 	count := 5
 	for i := 0; i < count; i++ {
 		messageChan <- fmt.Sprint(i)
 	}
 	close(messageChan)
 	h.HandleMessage()
-	assert.Equal(t, record, int32(count))
+	//consumer complete
+	assert.Equal(t, 0, len(messageChan))
 }
 
 func TestChannelDistribution(t *testing.T) {

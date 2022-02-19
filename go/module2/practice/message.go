@@ -18,14 +18,11 @@ type Consumer struct {
 	topic   string
 	name    string
 	handles []Handle
-	cancel  <-chan bool
 }
 
 type Handle struct {
-	test func()
-	//close tag
-	cancel <-chan bool
-	index  int
+	//number of consumer instance
+	index int
 	//message only read
 	message <-chan string
 }
@@ -49,7 +46,6 @@ func (h *Handle) HandleMessage() {
 		if !ok {
 			return
 		}
-		h.test()
 		fmt.Printf("Handle-%v, message: %v \n", h.index, msg)
 	}
 }
