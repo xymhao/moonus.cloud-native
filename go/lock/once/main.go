@@ -36,6 +36,12 @@ func (m *MuOnce) strings() []string {
 }
 
 func main() {
+	a := MuOnce{}
+	fmt.Println(a)
+	a = MuOnce{}
+
+	fmt.Println(a)
+
 	fmt.Println("Hello, playground")
 	m := new(MuOnce)
 	fmt.Println(m.strings())

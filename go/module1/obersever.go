@@ -43,7 +43,6 @@ func (consumer *Consumer) handle() {
 			message := <-consumer.ch
 			fmt.Println("receive：", message)
 		}
-
 	}(consumer.ch)
 }
 
