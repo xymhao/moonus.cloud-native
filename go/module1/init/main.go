@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	_ "moonus.cloud-native/go/init/a"
+	_ "moonus.cloud-native/go/module1/init/a"
+	_ "moonus.cloud-native/go/module1/init/b"
 )
-import _ "moonus.cloud-native/go/init/b"
 
 func init() {
 	fmt.Println("main init")
