@@ -15,13 +15,16 @@ type HandlerFunc func(ResponseWriter, *http.Request)
 
 var route = make(map[string]HandlerFunc)
 
+func init() {
+	route["/healthz"] = health
+}
+
 func main() {
 	//init port
 	var port = flag.String("port", "808", "setting http server default port")
 	flag.Parse()
 
 	glog.V(2).Infof("start http server")
-	route["/healthz"] = health
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", rootHandle)
 	//mux.HandleFunc("/healthz", health)
