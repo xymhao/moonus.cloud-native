@@ -7,10 +7,13 @@ import (
 	"github.com/golang/glog"
 	"log"
 	"net/http"
-	"net/http/pprof"
 	"os"
 	"strings"
 )
+
+type HandlerFunc func(ResponseWriter, *http.Request)
+
+var route = make(map[string]HandlerFunc)
 
 func main() {
 	//init port
@@ -18,14 +21,14 @@ func main() {
 	flag.Parse()
 
 	glog.V(2).Infof("start http server")
-
+	route["/healthz"] = health
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", rootHandle)
-	mux.HandleFunc("/healthz", health)
-	mux.HandleFunc("/debug/pprof/", pprof.Index)
-	mux.HandleFunc("/debug/pprof/profile", pprof.Profile)
-	mux.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
-	mux.HandleFunc("/debug/pprof/trace", pprof.Trace)
+	//mux.HandleFunc("/healthz", health)
+	//mux.HandleFunc("/debug/pprof/", pprof.Index)
+	//mux.HandleFunc("/debug/pprof/profile", pprof.Profile)
+	//mux.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+	//mux.HandleFunc("/debug/pprof/trace", pprof.Trace)
 
 	//start server
 	go func() {
@@ -48,42 +51,42 @@ func main() {
 	}
 }
 
-type MonitorResponseWriter struct {
+type ResponseWriter struct {
 	rw         http.ResponseWriter
 	statusCode int
 }
 
-func (w *MonitorResponseWriter) Header() http.Header {
+func (w *ResponseWriter) Header() http.Header {
 	return w.rw.Header()
 }
 
-func (w *MonitorResponseWriter) Write(b []byte) (int, error) {
+func (w *ResponseWriter) Write(b []byte) (int, error) {
 	return w.rw.Write(b)
 }
 
-func (w *MonitorResponseWriter) WriteHeader(statusCode int) {
+func (w *ResponseWriter) WriteHeader(statusCode int) {
 	w.rw.WriteHeader(statusCode)
 }
 
 func rootHandle(rw http.ResponseWriter, request *http.Request) {
-	writer := MonitorResponseWriter{rw: rw, statusCode: 200}
+	writer := ResponseWriter{rw: rw, statusCode: 200}
 	for k, v := range request.Header {
 		writer.Header().Set(k, v[0])
 	}
 	version := os.Getenv("VERSION")
 	writer.Header().Set("Version", version)
 
-	for k, v := range request.Header {
-		writer.Write([]byte(fmt.Sprintf("%v=%v\n", k, v)))
+	//self route
+	handlerFunc := route[request.RequestURI]
+	if handlerFunc != nil {
+		handlerFunc(writer, request)
 	}
-	for _, i := range writer.Header() {
-		fmt.Println(i)
-	}
+
 	fmt.Println("IP:", request.RemoteAddr)
 	fmt.Println("status code:", writer.statusCode)
 }
 
-func health(w http.ResponseWriter, request *http.Request) {
+func health(w ResponseWriter, request *http.Request) {
 	w.WriteHeader(200)
 	w.Write([]byte("200"))
 }
