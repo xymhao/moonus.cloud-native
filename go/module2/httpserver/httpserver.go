@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/golang/glog"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -13,6 +14,7 @@ import (
 
 type HandlerFunc func(ResponseWriter, *http.Request)
 
+//custom route
 var route = make(map[string]HandlerFunc)
 
 func init() {
@@ -54,6 +56,8 @@ func main() {
 	}
 }
 
+// ResponseWriter Decorator patterns
+// Implementing http statusCode record
 type ResponseWriter struct {
 	rw         http.ResponseWriter
 	statusCode int
@@ -85,6 +89,10 @@ func rootHandle(rw http.ResponseWriter, request *http.Request) {
 		handlerFunc(writer, request)
 	}
 
+	body, err := io.ReadAll(request.Body)
+	if err == nil && body != nil {
+		fmt.Println("body:", string(body))
+	}
 	fmt.Println("IP:", request.RemoteAddr)
 	fmt.Println("status code:", writer.statusCode)
 }
