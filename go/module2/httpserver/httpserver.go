@@ -97,7 +97,10 @@ func rootHandle(rw http.ResponseWriter, request *http.Request) {
 	fmt.Println("status code:", writer.statusCode)
 }
 
-func health(w ResponseWriter, request *http.Request) {
+func health(w ResponseWriter, _ *http.Request) {
 	w.WriteHeader(200)
-	w.Write([]byte("200"))
+	_, err := w.Write([]byte("200"))
+	if err != nil {
+		fmt.Println(err)
+	}
 }
