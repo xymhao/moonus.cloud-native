@@ -5,8 +5,13 @@
 
 ###step1 通过 port指定启动的端口
 ```
-go run httpserver.go -port 8090
+go run httpserver.go -port 909
 ```
+默认端口909
+###step2 浏览器打开http://localhost:909/healthz
+默认返回200
 
-###step2
+打开F12， network 查看response header
 
+###step3 控制台输出
+![image](printout.png)
