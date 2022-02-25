@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/go-playground/assert/v2"
 	"testing"
+	"time"
 )
 
 func TestHandleMessageConsumerCompleted(t *testing.T) {
@@ -13,8 +14,9 @@ func TestHandleMessageConsumerCompleted(t *testing.T) {
 	for i := 0; i < count; i++ {
 		messageChan <- fmt.Sprint(i)
 	}
-	close(messageChan)
 	h.HandleMessage()
+
+	time.Sleep(time.Second * 6)
 	//consumer complete
 	assert.Equal(t, 0, len(messageChan))
 }

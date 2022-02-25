@@ -8,7 +8,6 @@ import (
 func main() {
 	message := make(chan int, 10)
 	done := make(chan bool)
-
 	defer close(message)
 
 	go func() {

@@ -12,6 +12,7 @@ type Producer struct {
 	topic string
 	//readonly
 	Channels []chan string
+	done     chan bool
 }
 
 type Consumer struct {
@@ -25,6 +26,8 @@ type Handle struct {
 	index int
 	//message only read
 	message <-chan string
+
+	done chan bool
 }
 
 // Start init consumer and star handle goroutine
@@ -34,19 +37,26 @@ func (consumer *Consumer) Start(Channels []chan string) {
 	for i, channel := range Channels {
 		consumer.handles[i].message = channel
 		consumer.handles[i].index = i
+		consumer.handles[i].done = make(chan bool)
 		go consumer.handles[i].HandleMessage()
+	}
+}
+func (consumer *Consumer) Stop() {
+	for _, handle := range consumer.handles {
+		close(handle.done)
 	}
 }
 
 // HandleMessage handle message
 func (h *Handle) HandleMessage() {
-	ticker := time.NewTicker(time.Millisecond * 5)
+	ticker := time.NewTicker(time.Millisecond * 1)
 	for range ticker.C {
-		msg, ok := <-h.message
-		if !ok {
-			return
+		select {
+		case msg := <-h.message:
+			fmt.Printf("Handle-%v, message: %v \n", h.index, msg)
+		case <-h.done:
+			fmt.Println("handle message work stop")
 		}
-		fmt.Printf("Handle-%v, message: %v \n", h.index, msg)
 	}
 }
 
@@ -54,6 +64,10 @@ func (h *Handle) HandleMessage() {
 func (p *Producer) Producer(tag int, key string) {
 	index := tag % len(p.Channels)
 	p.Channels[index] <- key
+}
+
+func (p *Producer) Stop() {
+	close(p.done)
 }
 
 //console print
@@ -77,17 +91,32 @@ func (p *Producer) Producer(tag int, key string) {
 func main() {
 	channels := initChannels(3)
 	topic := "cn-study"
-	producer := Producer{Channels: channels, topic: topic}
+	producer := Producer{Channels: channels, topic: topic, done: make(chan bool)}
 	consumer := Consumer{name: "moonus", topic: topic}
 	//start consumer instance
 	consumer.Start(channels)
 
 	//start three thread produce message
-	ticker := time.NewTicker(time.Second)
+	go StartProducer(producer)
+
+	time.Sleep(time.Second * 10)
+	producer.Stop()
+	time.Sleep(time.Second)
+	consumer.Stop()
+}
+
+func StartProducer(producer Producer) {
+	ticker := time.NewTicker(time.Second * 2)
 	for range ticker.C {
-		go send(producer, 1, time.Second)
-		go send(producer, 2, time.Second*2)
-		go send(producer, 3, time.Second*3)
+		select {
+		case <-producer.done:
+			fmt.Println("producer done and stop.")
+			return
+		default:
+			go send(producer, 1, time.Second)
+			go send(producer, 2, time.Second*2)
+			go send(producer, 3, time.Second*3)
+		}
 	}
 }
 
