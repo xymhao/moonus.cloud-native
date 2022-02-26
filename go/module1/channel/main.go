@@ -7,6 +7,8 @@ import (
 
 func main() {
 	message := make(chan int, 10)
+	ChannelDemo()
+
 	done := make(chan bool)
 	defer close(message)
 
@@ -36,4 +38,26 @@ func main() {
 	time.Sleep(time.Second)
 
 	fmt.Println("complete")
+}
+
+func ChannelDemo() {
+	message := make(chan int, 10)
+
+	go func() {
+		x := 0
+		for true {
+			x++
+			message <- x
+			time.Sleep(time.Second * 1)
+			if x == 10 {
+				close(message)
+				return
+			}
+		}
+	}()
+
+	for i := range message {
+		fmt.Println(i)
+	}
+	fmt.Println("close")
 }

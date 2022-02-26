@@ -7,6 +7,7 @@ import (
 	"github.com/golang/glog"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"strings"
@@ -93,8 +94,25 @@ func rootHandle(rw http.ResponseWriter, request *http.Request) {
 	if err == nil && body != nil {
 		fmt.Println("body:", string(body))
 	}
-	fmt.Println("IP:", request.RemoteAddr)
+	var ip = GetCurrentIp(request)
+	fmt.Println("IP:", ip)
 	fmt.Println("status code:", writer.statusCode)
+}
+
+func GetCurrentIp(r *http.Request) interface{} {
+	xForwardedFor := r.Header.Get("X-Forwarded-For")
+	ip := strings.TrimSpace(strings.Split(xForwardedFor, ",")[0])
+	if ip != "" {
+		return ip
+	}
+	ip = strings.TrimSpace(r.Header.Get("X-Real-Ip"))
+	if ip != "" {
+		return ip
+	}
+	if ip, _, err := net.SplitHostPort(strings.TrimSpace(r.RemoteAddr)); err == nil {
+		return ip
+	}
+	return ""
 }
 
 func health(w ResponseWriter, _ *http.Request) {
