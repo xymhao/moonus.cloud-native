@@ -9,12 +9,18 @@ import (
 
 func TestHandleMessageConsumerCompleted(t *testing.T) {
 	messageChan := make(chan string, 10)
-	h := Handle{index: 0, message: messageChan}
+	h := Handle{index: 0, message: messageChan, flag: false, done: make(chan bool)}
 	count := 5
 	for i := 0; i < count; i++ {
 		messageChan <- fmt.Sprint(i)
 	}
+	go func() {
+		time.Sleep(time.Second * 3)
+		h.stop()
+
+	}()
 	h.HandleMessage()
+	close(h.done)
 
 	time.Sleep(time.Second * 6)
 	//consumer complete

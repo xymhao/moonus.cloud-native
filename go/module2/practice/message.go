@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"sync"
 	"time"
 )
 
@@ -22,12 +23,14 @@ type Consumer struct {
 }
 
 type Handle struct {
+	sync.Mutex
 	//number of consumer instance
 	index int
 	//message only read
 	message <-chan string
 
 	done chan bool
+	flag bool
 }
 
 // Start init consumer and star handle goroutine
@@ -49,15 +52,29 @@ func (consumer *Consumer) Stop() {
 
 // HandleMessage handle message
 func (h *Handle) HandleMessage() {
-	ticker := time.NewTicker(time.Millisecond * 1)
-	for range ticker.C {
+	//ticker := time.NewTicker(time.Millisecond * 1)
+	for !h.flag {
+		h.Lock()
+		if h.flag {
+			return
+		}
+		h.Unlock()
 		select {
 		case msg := <-h.message:
 			fmt.Printf("Handle-%v, message: %v \n", h.index, msg)
 		case <-h.done:
 			fmt.Println("handle message work stop")
+		default:
+			fmt.Println("default")
 		}
+		time.Sleep(time.Millisecond * 100)
 	}
+}
+
+func (h *Handle) stop() {
+	h.Lock()
+	h.flag = true
+	h.Unlock()
 }
 
 // Producer send message in target channel
