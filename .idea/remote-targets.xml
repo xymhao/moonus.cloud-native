@@ -18,17 +18,13 @@
           <config />
         </ContributedStateBase>
       </target>
-      <target name="WSL - Ubuntu-20.042" type="wsl">
+      <target name="moonus@192.168.31.99:22" type="ssh/sftp">
         <config>
-          <option name="distributionMsId" value="Ubuntu-20.04" />
-          <option name="projectRootOnTarget" value="/mnt/c/Program Files/JetBrains/GoLand 2021.1.3/jbr/bin&#10;/moonus.cloud-native" />
+          <option name="projectRootOnTarget" value="/home/moonus/moonus.cloud-native" />
+          <option name="serverName" value="moonus@192.168.31.99:22 password" />
         </config>
         <ContributedStateBase type="GoLanguageRuntime">
-          <config>
-            <option name="goPath" value="/home/xymhao/go" />
-            <option name="goRoot" value="/usr/bin/go" />
-            <option name="goVersion" value="go1.13.8 linux/amd64" />
-          </config>
+          <config />
         </ContributedStateBase>
       </target>
     </targets>

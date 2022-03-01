@@ -16,3 +16,10 @@ go run httpserver.go -port 909
 
 ###step3 控制台输出
 ![image](printout.png)
+
+### module 3 practice
+
+[Docker Image]( https://hub.docker.com/repository/docker/xymhao/httpserver)
+
+#### Practice
+![image](module3.png)
