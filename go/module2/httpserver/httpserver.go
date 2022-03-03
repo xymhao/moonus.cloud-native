@@ -24,7 +24,7 @@ func init() {
 
 func main() {
 	//init port
-	var port = flag.String("port", "808", "setting http server default port")
+	var port = flag.String("port", "809", "setting http server default port")
 	flag.Parse()
 
 	glog.V(2).Infof("start http server")

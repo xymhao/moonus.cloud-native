@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="85025bd5-dd25-4608-b367-0f32c8f8baab" name="moonus">
+        <fileTransfer rootFolder="/home/moonus" accessType="SFTP" host="192.168.31.98" port="22" sshConfigId="716a207d-c9a9-40e4-9dcc-248d2b8cb976" sshConfig="moonus@192.168.31.98:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
