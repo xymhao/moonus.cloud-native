@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="85025bd5-dd25-4608-b367-0f32c8f8baab" name="moonus">
-        <fileTransfer rootFolder="/home/moonus" accessType="SFTP" host="192.168.31.98" port="22" sshConfigId="716a207d-c9a9-40e4-9dcc-248d2b8cb976" sshConfig="moonus@192.168.31.98:22 password">
+        <fileTransfer rootFolder="/home/moonus" accessType="SFTP" host="192.168.128.128" port="22" sshConfigId="c843bfe1-9ff9-4330-a077-bc68f11698a6" sshConfig="moonus-vmware">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
