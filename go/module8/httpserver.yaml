@@ -7,6 +7,11 @@ spec:
   selector:
     matchLabels:
       app: httpserver
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -25,6 +30,16 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 5
             successThreshold: 2
+          livenessProbe:
+            failureThreshold: 3
+              httpGet:
+              path: /healthz
+              port: 80
+              scheme: HTTP
+              initialDelaySeconds: 5
+              periodSeconds: 10
+              successThreshold: 1
+              timeoutSeconds: 1
           #command: [ "/bin/sh", "-c", "ls /etc/config/" ]
           volumeMounts:
             - name: config-volume
@@ -40,8 +55,8 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-          # Provide the name of the ConfigMap containing the files you want
-          # to add to the container
+            # Provide the name of the ConfigMap containing the files you want
+            # to add to the container
             name: httpserver
 ---
 apiVersion: v1
