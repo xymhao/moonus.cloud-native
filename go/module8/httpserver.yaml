@@ -32,14 +32,14 @@ spec:
             successThreshold: 2
           livenessProbe:
             failureThreshold: 3
-              httpGet:
+            httpGet:
               path: /healthz
               port: 80
               scheme: HTTP
-              initialDelaySeconds: 5
-              periodSeconds: 10
-              successThreshold: 1
-              timeoutSeconds: 1
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           #command: [ "/bin/sh", "-c", "ls /etc/config/" ]
           volumeMounts:
             - name: config-volume
