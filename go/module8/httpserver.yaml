@@ -87,6 +87,7 @@ kind: Service
 metadata:
   name: httpserver
 spec:
+  type: NodePort
   ports:
     - name: http
       port: 80
