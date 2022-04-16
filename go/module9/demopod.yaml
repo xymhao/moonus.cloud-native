@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ssh
+spec:
+  containers:
+    - name: alpine
+      image: alpine
+      stdin: true
+      tty: true
+      resources:
+        requests:
+          cpu: 2000m
+          memory: 100Mi
+  hostNetwork: true
+  nodeName: moonus
