@@ -10,6 +10,16 @@ spec:
   http:
     - match:
         - uri:
+            exact: "/isto/metrics"
+      rewrite:
+        uri: "/metrics"
+      route:
+        - destination:
+            host: httpserver-istio.module12.svc.cluster.local
+            port:
+              number: 80
+    - match:
+        - uri:
             exact: "/httpserver"
       rewrite:
         uri: "/healthz"
@@ -18,6 +28,14 @@ spec:
             host: httpserver-istio.module12.svc.cluster.local
             port:
               number: 80
+    - match:
+        - port: 443
+      route:
+        - destination:
+            host: httpserver-istio.module12.svc.cluster.local
+            port:
+              number: 80
+
 
 ---
 apiVersion: networking.istio.io/v1beta1
