@@ -34,4 +34,8 @@ k get svc -nistio-system
 export INGRESS_IP=10.96.164.31
 
 curl --resolve httpsserver-istio.cncamp.io:443:$INGRESS_IP https://httpsserver-istio.cncamp.io/healthz -v -k
+curl --resolve httpsserver-istio.cncamp.io:443:$INGRESS_IP https://httpsserver-istio.cncamp.io/metrics -v -k
+curl --resolve httpsserver-istio.cncamp.io:443:$INGRESS_IP https://httpsserver-istio.cncamp.io/httpserver -v -k
+
+curl -H "Host:httpsserver-istio.cncamp.io" $INGRESS_IP/hello -v
 ```
