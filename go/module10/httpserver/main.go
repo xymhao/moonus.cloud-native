@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 	"math/rand"
-	"moonus.cloud-native/go/module10/metrics"
+	"module10/v2/metrics"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
@@ -69,8 +69,8 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	timer := metrics.NewTimer()
 	defer timer.ObserveTotal()
 	user := r.URL.Query().Get("user")
-	delay := randInt(10,2000)
-	time.Sleep(time.Millisecond*time.Duration(delay))
+	delay := randInt(10, 2000)
+	time.Sleep(time.Millisecond * time.Duration(delay))
 	if user != "" {
 		io.WriteString(w, fmt.Sprintf("hello [%s]\n", user))
 	} else {
