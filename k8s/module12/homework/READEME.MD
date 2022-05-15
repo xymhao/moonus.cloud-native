@@ -1,7 +1,7 @@
 ### 创建ns
 kubectl create ns module12
 
-###添加istio label
+### 添加istio label
 kubectl label ns module12 istio-injection=enabled
 
 ### 创建httpserver
